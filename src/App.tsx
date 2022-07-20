@@ -78,7 +78,12 @@ const App: FunctionComponent = () => {
             onClick={() => setShowMap(!showMap)}>
             Ver lista
           </Button>
-          <ProviderMap filters={filters} zoom={14} setMap={setMap} />
+          <ProviderMap
+            filters={filters}
+            zoom={4}
+            setMap={setMap}
+            center={[-10.3333333, -51.2]}
+          />
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ import { filterFetchProvider, ProviderFilters, useDatabase } from "@/database"
 import { useColorScheme, usePick } from "@/lib/hooks"
 
 import type { HealthProvider } from "@/database/models"
-import type { Map, TileLayer as TileLayerType } from "leaflet"
+import type { LatLngExpression, Map, TileLayer as TileLayerType } from "leaflet"
 
 import MiniMap from "./MiniMap"
 import ProviderMarkers from "./ProviderMarkers"
@@ -24,12 +24,14 @@ const tileProviders = {
 
 type MapProps = {
   zoom: number
+  center: LatLngExpression
   filters: ProviderFilters
   setMap: (map: Map) => void
 }
 
 const ProviderMap: FunctionComponent<MapProps> = ({
   zoom,
+  center,
   setMap,
   filters,
 }) => {
@@ -57,8 +59,8 @@ const ProviderMap: FunctionComponent<MapProps> = ({
   return useMemo(
     () => (
       <MapContainer
-        minZoom={6}
-        center={[-23.5489, -46.6388]}
+        minZoom={3}
+        center={center}
         zoom={zoom}
         doubleClickZoom={true}
         scrollWheelZoom={true}
