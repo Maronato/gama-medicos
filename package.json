@@ -1,0 +1,53 @@
+{
+  "name": "mckmedicos",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint:types": "tsc --noEmit",
+    "lint:eslint": "eslint",
+    "lint": "npm run lint:types && npm run lint:eslint -- .",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:staged": "npm run lint:types && npm run lint:eslint -- --fix"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.6.6",
+    "@heroicons/react": "^1.0.6",
+    "@react-leaflet/core": "^2.0.0",
+    "absurd-sql": "^0.0.53",
+    "classnames": "^2.3.1",
+    "comlink": "^4.3.1",
+    "leaflet": "^1.8.0",
+    "leaflet.markercluster": "^1.5.3",
+    "pako": "^2.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.0.1",
+    "sql-template-tag": "^5.0.3",
+    "sql.js": "^1.7.0",
+    "sql.js-httpvfs": "^0.8.11",
+    "use-debounce": "^8.0.2",
+    "vite-tsconfig-paths": "^3.5.0"
+  },
+  "devDependencies": {
+    "@marolint/eslint-config-react": "^1.0.2",
+    "@tailwindcss/forms": "^0.5.2",
+    "@types/leaflet": "^1.7.11",
+    "@types/leaflet.markercluster": "^1.5.1",
+    "@types/pako": "^2.0.0",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@types/sql.js": "^1.4.3",
+    "@vitejs/plugin-react": "^2.0.0",
+    "autoprefixer": "^10.4.7",
+    "eslint": "^8.20.0",
+    "postcss": "^8.4.14",
+    "prettier": "^2.7.1",
+    "tailwindcss": "^3.1.6",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.0"
+  }
+}

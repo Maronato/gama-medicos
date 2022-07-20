@@ -1,0 +1,5 @@
+export type { DB, DBBackend } from "./interface"
+export { DummyBackend } from "./dummy"
+export { HTTPvfsBackend } from "./httpvfs"
+export { AsyncZlibBackend } from "./zlib/async"
+export { ZlibBackend } from "./zlib/sync"

@@ -1,0 +1,18 @@
+.button {
+  @apply rounded;
+  @apply border border-solid border-transparent;
+  @apply px-4 py-2;
+  @apply text-base font-semibold;
+  @apply cursor-pointer;
+  @apply transition duration-200 hover:border-slate-700 dark:hover:border-slate-300;
+}
+
+.primary {
+  @apply bg-blue-500 hover:bg-blue-600;
+  @apply text-white;
+}
+
+.secondary {
+  @apply bg-black hover:bg-gray-700;
+  @apply text-white;
+}

@@ -1,0 +1,6 @@
+.leaflet-popup-content-wrapper {
+  @apply dark:!bg-neutral-800;
+}
+.leaflet-popup-tip {
+  @apply dark:!bg-neutral-800;
+}

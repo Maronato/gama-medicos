@@ -1,0 +1,14 @@
+.marker-cluster {
+  @apply bg-white dark:bg-black;
+  @apply shadow rounded-full hover:!opacity-70;
+  @apply !w-12 !h-12;
+}
+
+.marker-cluster div {
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  @apply w-12 h-12;
+  @apply text-center text-base font-bold;
+}
+.marker-cluster span {
+  @apply leading-[3rem];
+}
