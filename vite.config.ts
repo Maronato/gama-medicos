@@ -16,8 +16,5 @@ export default defineConfig(({ command }) => {
       alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
     },
   }
-  if (command === "build") {
-    config.base = "/mck-medicos/"
-  }
   return config
 })
