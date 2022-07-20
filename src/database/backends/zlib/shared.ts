@@ -5,6 +5,8 @@ import { once } from "@/lib/utils"
 
 import type { Sql } from "sql-template-tag"
 
+import dbURL from "./db.sqlite.zip?url"
+
 export const deflateDB = once(async () => {
   const res = await fetch("/db.sqlite")
   const buffer = await res.arrayBuffer()
@@ -14,7 +16,7 @@ export const deflateDB = once(async () => {
 })
 
 const inflateDB = once(async () => {
-  const res = await fetch("/db.sqlite.zip")
+  const res = await fetch(dbURL)
   const buffer = await res.arrayBuffer()
   const buff = new Uint8Array(buffer)
   return Pako.inflate(buff)

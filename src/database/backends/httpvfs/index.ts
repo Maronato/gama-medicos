@@ -10,6 +10,8 @@ import { createLogger, Logger, makeid, perfRun } from "../utils"
 import type { DBBackend, DB } from "../interface"
 import type { SplitFileConfig } from "sql.js-httpvfs/dist/sqlite.worker"
 
+import dbURL from "./db.sqlite?url"
+
 function getWorkerConfig(url: string) {
   const config: SplitFileConfig = {
     from: "inline",
@@ -29,7 +31,7 @@ function createWorker(url: string) {
 }
 
 const initDB = once(async () => {
-  const worker = await createWorker("/db.sqlite")
+  const worker = await createWorker(dbURL)
   return worker
 })
 
