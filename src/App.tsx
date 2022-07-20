@@ -50,7 +50,7 @@ const App: FunctionComponent = () => {
           })}>
           <div className="flex mb-5">
             <div className="md:mx-auto flex flex-col">
-              <span className="text-3xl">MckMédicos</span>
+              <span className="text-3xl">GamaMédicos</span>
             </div>
           </div>
           <div className="flex">
