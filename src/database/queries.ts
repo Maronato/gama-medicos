@@ -3,18 +3,11 @@ import sql, { join, Sql, raw, empty } from "sql-template-tag"
 import { isNotNull } from "@/lib/utils"
 
 import type { DB } from "./backends"
-import type {
-  Review,
-  Location,
-  Specialty,
-  Category,
-  HealthProvider,
-} from "./models"
+import type { Location, Specialty, Category, HealthProvider } from "./models"
 import type { LatLngBounds } from "leaflet"
 
 enum TABLE {
   PROVIDER = "provider",
-  REVIEW = "review",
   CATEGORY = "category",
   SPECIALTY = "specialty",
   LOCATION = "location",
@@ -26,37 +19,11 @@ type NoResult = {
 
 type MaybeResult<T> = T | NoResult
 
-type RawReview = {
-  contract: string
-  author_name: string
-  author_photo_url: string | null
-  rating: number
-  text: string
-  time: number
-}
-const parseReview = (review: MaybeResult<RawReview>): Review | null => {
-  if (review.contract === undefined) {
-    return null
-  }
-  return {
-    contract: review.contract,
-    author_name: review.author_name,
-    author_photo_url: review.author_photo_url,
-    rating: review.rating,
-    text: review.text,
-    time: new Date(review.time),
-  }
-}
-
 type RawLocation = {
   contract: string
   lat: number
   lng: number
   address: string
-  postal_code: string | null
-  country: string
-  state: string
-  city: string
 }
 const parseLocation = (location: MaybeResult<RawLocation>): Location | null => {
   if (location.contract === undefined) {
@@ -67,10 +34,6 @@ const parseLocation = (location: MaybeResult<RawLocation>): Location | null => {
     lat: location.lat,
     lng: location.lng,
     address: location.address,
-    postal_code: location.postal_code,
-    country: location.country,
-    state: location.state,
-    city: location.city,
   }
 }
 
@@ -109,8 +72,6 @@ const parseCategory = (category: MaybeResult<RawCategory>): Category | null => {
 type RawHealthProvider = {
   contract: string
   name: string
-  network: string
-  type: string
   phone_number: string | null
   status: string
   website: string | null
@@ -121,7 +82,6 @@ type RawHealthProvider = {
 const parseHealthProvider = (
   provider: MaybeResult<RawHealthProvider>,
   locations: Record<string, Location>,
-  reviews: Record<string, Review[]>,
   categories: Record<string, Category[]>,
   specialties: Record<string, Specialty[]>
 ): HealthProvider | null => {
@@ -131,8 +91,6 @@ const parseHealthProvider = (
   return {
     contract: provider.contract,
     name: provider.name,
-    network: provider.network,
-    type: provider.type,
     phone_number: provider.phone_number,
     status: provider.status,
     website: provider.website,
@@ -142,7 +100,6 @@ const parseHealthProvider = (
     location: locations[provider.contract],
     specialties: specialties[provider.contract] ?? [],
     categories: categories[provider.contract] ?? [],
-    reviews: reviews[provider.contract] ?? [],
   }
 }
 
@@ -188,16 +145,13 @@ export async function fetchProviders(
     return []
   }
   // Define queries
-  const reviewsQuery = sql`SELECT contract, author_name, author_photo_url, rating, "text", "time" FROM ${raw(
-    TABLE.REVIEW
-  )} WHERE contract IN (${join(contracts)})`
   const categoriesQuery = sql`SELECT contract, category FROM ${raw(
     TABLE.CATEGORY
   )} WHERE contract IN (${join(contracts)})`
   const specialtiesQuery = sql`SELECT contract, specialty, is_primary FROM ${raw(
     TABLE.SPECIALTY
   )} WHERE contract IN (${join(contracts)})`
-  const locationsQuery = sql`SELECT contract, lat, lng, address, postal_code, country, state, city FROM ${raw(
+  const locationsQuery = sql`SELECT contract, lat, lng, address FROM ${raw(
     TABLE.LOCATION
   )} WHERE contract IN (${join(contracts)})`
   const providersQuery = sql`SELECT * FROM ${raw(
@@ -205,33 +159,23 @@ export async function fetchProviders(
   )} WHERE contract IN (${join(contracts)})`
 
   // Execute all queries in parallel
-  const [reviews, categories, specialties, locations, rawProviders] =
-    await Promise.all([
-      findMany<RawReview>(db, reviewsQuery).then((reviews) =>
-        indexValues(reviews, parseReview, true)
-      ),
-      findMany<Category>(db, categoriesQuery).then((categories) =>
-        indexValues(categories, parseCategory, true)
-      ),
-      findMany<Specialty>(db, specialtiesQuery).then((specialties) =>
-        indexValues(specialties, parseSpecialty, true)
-      ),
-      findMany<Location>(db, locationsQuery).then((locations) =>
-        indexValues(locations, parseLocation, false)
-      ),
-      findMany<HealthProvider>(db, providersQuery),
-    ])
+  const [categories, specialties, locations, rawProviders] = await Promise.all([
+    findMany<Category>(db, categoriesQuery).then((categories) =>
+      indexValues(categories, parseCategory, true)
+    ),
+    findMany<Specialty>(db, specialtiesQuery).then((specialties) =>
+      indexValues(specialties, parseSpecialty, true)
+    ),
+    findMany<Location>(db, locationsQuery).then((locations) =>
+      indexValues(locations, parseLocation, false)
+    ),
+    findMany<HealthProvider>(db, providersQuery),
+  ])
 
   // Parse providers and include reviews, categories, specialties, and locations
   return rawProviders
     .map((provider) => {
-      return parseHealthProvider(
-        provider,
-        locations,
-        reviews,
-        categories,
-        specialties
-      )
+      return parseHealthProvider(provider, locations, categories, specialties)
     })
     .filter(isNotNull)
 }
