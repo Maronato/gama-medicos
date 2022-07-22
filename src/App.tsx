@@ -14,6 +14,8 @@ import {
 import type { ProviderFilters } from "@/database"
 import type { LatLngExpression } from "leaflet"
 
+const defaultMapCenter: LatLngExpression = [-10.3333333, -51.2]
+
 const App: FunctionComponent = () => {
   const [map, setMap] = useExternalMap()
   const [showMap, setShowMap] = useState(false)
@@ -82,7 +84,7 @@ const App: FunctionComponent = () => {
             filters={filters}
             zoom={4}
             setMap={setMap}
-            center={[-10.3333333, -51.2]}
+            center={defaultMapCenter}
           />
         </div>
       </div>
