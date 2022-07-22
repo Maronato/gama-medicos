@@ -3,12 +3,14 @@ import initSqlJs, { BindParams, Database } from "sql.js"
 
 import { once } from "@/lib/utils"
 
+import dbFullURL from "../httpvfs/db.sqlite?url"
+
 import type { Sql } from "sql-template-tag"
 
 import dbURL from "./db.sqlite.zip?url"
 
 export const deflateDB = once(async () => {
-  const res = await fetch("/db.sqlite")
+  const res = await fetch(dbFullURL)
   const buffer = await res.arrayBuffer()
   const buff = new Uint8Array(buffer)
   const deflated = Pako.deflate(buff)
