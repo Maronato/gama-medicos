@@ -28,8 +28,14 @@ export class ZlibBackend implements DBBackend {
     const db = {
       async query<T>(query: Sql) {
         const id = makeid()
+
         logger.log(`executing query ${id}`)
+        // Log query explanation
+        const explain = sql`explain query plan ${query}`
+        logger.debug(`query ${id} explanation:`, await findMany(sqlDB, explain))
+        // Log query values
         logger.debug(`query ${id} '${query.sql}' with values ${query.values}`)
+
         const [result, time] = await perfRun(() => findMany<T>(sqlDB, query))
         logger.log(
           `query ${id} took ${time}ms and returned ${result.length} rows`

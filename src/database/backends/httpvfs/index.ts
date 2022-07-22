@@ -57,6 +57,13 @@ export class HTTPvfsBackend implements DBBackend {
       async query<T>(query: Sql) {
         const id = makeid()
         logger.log(`executing query ${id}`)
+        // Log query explanation
+        const explain = sql`explain query plan ${query}`
+        logger.debug(
+          `query ${id} explanation:`,
+          await worker.db.query(explain.sql, explain.values)
+        )
+        // Log query values
         logger.debug(`query ${id} '${query.sql}' with values ${query.values}`)
 
         const [result, time] = await perfRun(
