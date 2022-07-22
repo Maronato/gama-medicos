@@ -1,20 +1,17 @@
 import path from "path"
 
 import react from "@vitejs/plugin-react"
-import { defineConfig, UserConfig } from "vite"
+import { defineConfig } from "vite"
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => {
-  const config: UserConfig = {
-    plugins: [react()],
-    server: {
-      headers: {
-        "Accept-Ranges": "bytes",
-      },
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    headers: {
+      "Accept-Ranges": "bytes",
     },
-    resolve: {
-      alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
-    },
-  }
-  return config
+  },
+  resolve: {
+    alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
+  },
 })

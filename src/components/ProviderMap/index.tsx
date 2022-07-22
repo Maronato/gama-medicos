@@ -76,7 +76,7 @@ const ProviderMap: FunctionComponent<MapProps> = ({
         <MiniMap position="topleft" />
       </MapContainer>
     ),
-    [zoom, providers, theme, setMap]
+    [zoom, providers, theme, setMap, center]
   )
 }
 
