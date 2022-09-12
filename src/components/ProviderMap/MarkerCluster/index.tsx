@@ -15,11 +15,13 @@ const MarkerCluster = createPathComponent(
     const clusterEvents: Record<string, LeafletEventHandlerFn> = {}
 
     // Splitting props and events to different objects
-    Object.entries(props).forEach(([propName, prop]) =>
-      propName.startsWith("on")
-        ? (clusterEvents[propName] = prop)
-        : (clusterProps[propName] = prop)
-    )
+    Object.entries(props).forEach(([propName, prop]) => {
+      if (propName.startsWith("on")) {
+        clusterEvents[propName] = prop as LeafletEventHandlerFn
+      } else {
+        clusterProps[propName] = prop
+      }
+    })
     const instance = new MarkerClusterGroup({
       ...clusterProps,
     })

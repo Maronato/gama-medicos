@@ -115,7 +115,11 @@ const MultiCombobox: FunctionComponent<MultiComboboxProps> = ({
       : placeholder
 
   return (
-    <Combobox value={selected} onChange={setSelected} multiple name={name}>
+    <Combobox
+      value={selected}
+      onChange={setSelected as (value: string[]) => void}
+      multiple
+      name={name}>
       <div className="relative mt-1 w-full">
         <div className="input-wrapper">
           <Combobox.Input
